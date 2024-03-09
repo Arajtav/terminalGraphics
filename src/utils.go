@@ -4,7 +4,7 @@ import (
     "math"
 )
 
-func interpolateU16(a uint16, b uint16, t float32) float32 {
+func interpolateU16(a int16, b int16, t float32) float32 {
     return float32(a) + ((float32(b)-float32(a))*t);
 }
 

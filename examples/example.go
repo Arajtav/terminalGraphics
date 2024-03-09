@@ -5,10 +5,29 @@ import (
 )
 
 func main() {
-    // I have no idea, random lines.
+    // 3D cube
     var s tg.Screen;
-    s.Init(64, 64);
-    s.DrawLine(tg.Coord2D{4, 4}, tg.Coord2D{59, 59}, tg.Color{0, 127, 255});
-    s.DrawLine(tg.Coord2D{4, 59}, tg.Coord2D{59, 4}, tg.Color{0, 255, 127});
+    s.Init(96, 96);
+
+    s.Fill(tg.Color{255, 255, 255})
+
+    fv := float32(32.0);
+    c := tg.Color{0, 0, 0};
+
+    s.SetPixel(tg.Point3DToPoint2D(tg.Vertex{0, 0, 0}, fv), c);
+
+    s.DrawLine(tg.Point3DToPoint2D(tg.Vertex{-1, -1,  1}, fv), tg.Point3DToPoint2D(tg.Vertex{-1, -1,  2}, fv), c);
+    s.DrawLine(tg.Point3DToPoint2D(tg.Vertex{-1, -1,  2}, fv), tg.Point3DToPoint2D(tg.Vertex{ 1, -1,  2}, fv), c);
+    s.DrawLine(tg.Point3DToPoint2D(tg.Vertex{ 1, -1,  2}, fv), tg.Point3DToPoint2D(tg.Vertex{ 1, -1,  1}, fv), c);
+    s.DrawLine(tg.Point3DToPoint2D(tg.Vertex{ 1, -1,  1}, fv), tg.Point3DToPoint2D(tg.Vertex{-1, -1,  1}, fv), c);
+    s.DrawLine(tg.Point3DToPoint2D(tg.Vertex{-1,  1,  1}, fv), tg.Point3DToPoint2D(tg.Vertex{-1,  1,  2}, fv), c);
+    s.DrawLine(tg.Point3DToPoint2D(tg.Vertex{-1,  1,  2}, fv), tg.Point3DToPoint2D(tg.Vertex{ 1,  1,  2}, fv), c);
+    s.DrawLine(tg.Point3DToPoint2D(tg.Vertex{ 1,  1,  2}, fv), tg.Point3DToPoint2D(tg.Vertex{ 1,  1,  1}, fv), c);
+    s.DrawLine(tg.Point3DToPoint2D(tg.Vertex{ 1,  1,  1}, fv), tg.Point3DToPoint2D(tg.Vertex{-1,  1,  1}, fv), c);
+    s.DrawLine(tg.Point3DToPoint2D(tg.Vertex{ 1,  1,  1}, fv), tg.Point3DToPoint2D(tg.Vertex{ 1, -1,  1}, fv), c);
+    s.DrawLine(tg.Point3DToPoint2D(tg.Vertex{ 1,  1,  2}, fv), tg.Point3DToPoint2D(tg.Vertex{ 1, -1,  2}, fv), c);
+    s.DrawLine(tg.Point3DToPoint2D(tg.Vertex{-1,  1,  2}, fv), tg.Point3DToPoint2D(tg.Vertex{-1, -1,  2}, fv), c);
+    s.DrawLine(tg.Point3DToPoint2D(tg.Vertex{-1,  1,  1}, fv), tg.Point3DToPoint2D(tg.Vertex{-1, -1,  1}, fv), c);
+
     s.Print();
 }
