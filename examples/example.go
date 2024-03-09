@@ -6,7 +6,7 @@ import (
 
 func main() {
     // 3D cube
-    var s tg.Screen;
+    var s tg.Canvas;
     s.Init(96, 96);
 
     s.Fill(tg.Color{255, 255, 255})
