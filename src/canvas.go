@@ -32,7 +32,7 @@ func (s *Canvas) Fill(c Color) {
     }
 }
 
-// Fills Canvas with #000000
+// Sets every pixel in Canvas to #000000
 func (s *Canvas) Clear() {
     s.Fill(Color{0, 0, 0});
 }

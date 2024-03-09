@@ -6,28 +6,27 @@ import (
 
 func main() {
     // 3D cube
-    var s tg.Canvas;
-    s.Init(96, 96);
+    var s tg.Canvas3D;
+    s.Init(96, 96, 32.0);
 
     s.Fill(tg.Color{255, 255, 255})
-
-    fv := float32(32.0);
     c := tg.Color{0, 0, 0};
 
-    s.SetPixel(tg.Point3DToPoint2D(tg.Vertex{0, 0, 0}, fv), c);
 
-    s.DrawLine(tg.Point3DToPoint2D(tg.Vertex{-1, -1,  1}, fv), tg.Point3DToPoint2D(tg.Vertex{-1, -1,  2}, fv), c);
-    s.DrawLine(tg.Point3DToPoint2D(tg.Vertex{-1, -1,  2}, fv), tg.Point3DToPoint2D(tg.Vertex{ 1, -1,  2}, fv), c);
-    s.DrawLine(tg.Point3DToPoint2D(tg.Vertex{ 1, -1,  2}, fv), tg.Point3DToPoint2D(tg.Vertex{ 1, -1,  1}, fv), c);
-    s.DrawLine(tg.Point3DToPoint2D(tg.Vertex{ 1, -1,  1}, fv), tg.Point3DToPoint2D(tg.Vertex{-1, -1,  1}, fv), c);
-    s.DrawLine(tg.Point3DToPoint2D(tg.Vertex{-1,  1,  1}, fv), tg.Point3DToPoint2D(tg.Vertex{-1,  1,  2}, fv), c);
-    s.DrawLine(tg.Point3DToPoint2D(tg.Vertex{-1,  1,  2}, fv), tg.Point3DToPoint2D(tg.Vertex{ 1,  1,  2}, fv), c);
-    s.DrawLine(tg.Point3DToPoint2D(tg.Vertex{ 1,  1,  2}, fv), tg.Point3DToPoint2D(tg.Vertex{ 1,  1,  1}, fv), c);
-    s.DrawLine(tg.Point3DToPoint2D(tg.Vertex{ 1,  1,  1}, fv), tg.Point3DToPoint2D(tg.Vertex{-1,  1,  1}, fv), c);
-    s.DrawLine(tg.Point3DToPoint2D(tg.Vertex{ 1,  1,  1}, fv), tg.Point3DToPoint2D(tg.Vertex{ 1, -1,  1}, fv), c);
-    s.DrawLine(tg.Point3DToPoint2D(tg.Vertex{ 1,  1,  2}, fv), tg.Point3DToPoint2D(tg.Vertex{ 1, -1,  2}, fv), c);
-    s.DrawLine(tg.Point3DToPoint2D(tg.Vertex{-1,  1,  2}, fv), tg.Point3DToPoint2D(tg.Vertex{-1, -1,  2}, fv), c);
-    s.DrawLine(tg.Point3DToPoint2D(tg.Vertex{-1,  1,  1}, fv), tg.Point3DToPoint2D(tg.Vertex{-1, -1,  1}, fv), c);
+    s.DrawPoint(tg.Vertex{0, 0, 0}, c);
+
+    s.DrawLine(tg.Vertex{-1, -1, 2}, tg.Vertex{-1,  1, 2}, c);
+    s.DrawLine(tg.Vertex{-1,  1, 2}, tg.Vertex{ 1,  1, 2}, c);
+    s.DrawLine(tg.Vertex{ 1,  1, 2}, tg.Vertex{ 1, -1, 2}, c);
+    s.DrawLine(tg.Vertex{ 1, -1, 2}, tg.Vertex{-1, -1, 2}, c);
+    s.DrawLine(tg.Vertex{-1, -1, 1}, tg.Vertex{-1,  1, 1}, c);
+    s.DrawLine(tg.Vertex{-1,  1, 1}, tg.Vertex{ 1,  1, 1}, c);
+    s.DrawLine(tg.Vertex{ 1,  1, 1}, tg.Vertex{ 1, -1, 1}, c);
+    s.DrawLine(tg.Vertex{ 1, -1, 1}, tg.Vertex{-1, -1, 1}, c);
+    s.DrawLine(tg.Vertex{ 1, -1, 1}, tg.Vertex{ 1, -1, 2}, c);
+    s.DrawLine(tg.Vertex{-1, -1, 1}, tg.Vertex{-1, -1, 2}, c);
+    s.DrawLine(tg.Vertex{ 1,  1, 1}, tg.Vertex{ 1,  1, 2}, c);
+    s.DrawLine(tg.Vertex{-1,  1, 1}, tg.Vertex{-1,  1, 2}, c);
 
     s.Print();
 }
