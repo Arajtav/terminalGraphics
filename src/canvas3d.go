@@ -35,3 +35,9 @@ func (s *Canvas3D) DrawPoint(v Vertex, c Color) {
 func (s *Canvas3D) DrawLine(v0 Vertex, v1 Vertex, c Color) {
     s.cv.DrawLine(Point3DToPoint2D(v0, s.fv), Point3DToPoint2D(v1, s.fv), c)
 }
+
+func (s *Canvas3D) DrawTriangle(v0 Vertex, v1 Vertex, v2 Vertex, c Color) {
+    s.DrawLine(v0, v1, c);
+    s.DrawLine(v1, v2, c);
+    s.DrawLine(v2, v0, c);
+}
