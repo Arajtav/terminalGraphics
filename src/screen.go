@@ -43,12 +43,12 @@ func (s *Screen) Print() {
 }
 
 // Sets value of a pixel at given position to c
-func (s *Screen) SetPixel(x uint16, y uint16, c Color) {
-    if x >= s.sizeX || y >= s.sizeY { return; }
-    s.data[y][x] = c;
+func (s *Screen) SetPixel(p Coord2D, c Color) {
+    if p.X >= s.sizeX || p.Y >= s.sizeY { return; }
+    s.data[p.Y][p.X] = c;
 }
 
 // Same as SetPixel, but it doesn't check if pixel position is correct
-func (s *Screen) SetPixelUnsafe(x uint16, y uint16, c Color) {
-    s.data[y][x] = c;
+func (s *Screen) SetPixelUnsafe(p Coord2D, c Color) {
+    s.data[p.Y][p.X] = c;
 }

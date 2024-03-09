@@ -11,3 +11,8 @@ type Voxel struct {
     Y int32;
     Z int32;
 }
+
+type Coord2D struct {
+    X uint16;
+    Y uint16;
+}
