@@ -7,9 +7,9 @@ type Color struct {
 }
 
 type Vertex struct {
-    X int32;
-    Y int32;
-    Z int32;
+    X float32;
+    Y float32;
+    Z float32;
 }
 
 type Coord2D struct {

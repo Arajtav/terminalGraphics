@@ -2,7 +2,7 @@ package terminalGraphics
 
 import "fmt"
 
-// Stores Pixels and own size
+// Stores pixels and own size
 type Canvas struct {
     sizeX int16;
     sizeY int16;
