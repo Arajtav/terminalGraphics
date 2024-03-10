@@ -19,10 +19,25 @@ type Model struct {
     scale       Vec3;
 }
 
+// Creates empty model
 func GetEmptyModel() Model {
     var m Model;
     m.scale = Vec3{1.0, 1.0, 1.0};
     return m;
+}
+
+// Returns current scale of the model
+func (m *Model) GetScale() Vec3 { return m.scale; }
+
+// Changes scale of Model, recalculate every vertex
+func (m *Model) SetScale(s Vec3) {
+    r := Vec3{s.X/m.scale.X, s.Y/m.scale.Y, s.Z/m.scale.Z};
+    for i := 0; i<len(m.vertices); i++ {
+        m.vertices[i].X *= r.X;
+        m.vertices[i].Y *= r.Y;
+        m.vertices[i].Z *= r.Z;
+    }
+    m.scale = s;
 }
 
 // Checks if Vertex exists in model, will return 65535 if Vertex doesn't exist. Vertex MUST already be transformed
