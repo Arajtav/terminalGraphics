@@ -7,12 +7,14 @@ type Color struct {
     B uint8;
 }
 
-type Coord2D struct {
+// Vec2 with float32
+type Vec2 struct {
     X float32;
     Y float32;
 }
 
-type Vertex struct {
+// Vec3 with float32
+type Vec3 struct {
     X float32;
     Y float32;
     Z float32;

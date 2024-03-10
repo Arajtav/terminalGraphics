@@ -7,7 +7,7 @@ type Triangle struct {
 }
 
 type Model struct {
-    vertices    []Vertex;
+    vertices    []Vec3;
     triangles   []Triangle;     // stores indexes of vertices, making triangles
 }
 
@@ -15,14 +15,14 @@ type Model struct {
 
 func Cube(size float32) Model {
     var m Model;
-    m.vertices = append(m.vertices, Vertex{ size,  size,  size});
-    m.vertices = append(m.vertices, Vertex{-size,  size,  size});
-    m.vertices = append(m.vertices, Vertex{ size, -size,  size});
-    m.vertices = append(m.vertices, Vertex{-size, -size,  size});
-    m.vertices = append(m.vertices, Vertex{ size,  size, -size});
-    m.vertices = append(m.vertices, Vertex{-size,  size, -size});
-    m.vertices = append(m.vertices, Vertex{ size, -size, -size});
-    m.vertices = append(m.vertices, Vertex{-size, -size, -size});
+    m.vertices = append(m.vertices, Vec3{ size,  size,  size});
+    m.vertices = append(m.vertices, Vec3{-size,  size,  size});
+    m.vertices = append(m.vertices, Vec3{ size, -size,  size});
+    m.vertices = append(m.vertices, Vec3{-size, -size,  size});
+    m.vertices = append(m.vertices, Vec3{ size,  size, -size});
+    m.vertices = append(m.vertices, Vec3{-size,  size, -size});
+    m.vertices = append(m.vertices, Vec3{ size, -size, -size});
+    m.vertices = append(m.vertices, Vec3{-size, -size, -size});
     // back
     m.triangles = append(m.triangles, Triangle{4, 7, 6});
     m.triangles = append(m.triangles, Triangle{4, 7, 5});
@@ -45,10 +45,10 @@ func Cube(size float32) Model {
 }
 
 // THIS IS FOR TEST, PROBABLY WILL BE REMOVED BECAUSE IT'S NOT NEEDED
-func (m *Model) Move(x float32, y float32, z float32) {
+func (m *Model) Move(v Vec3) {
     for i := 0; i<len(m.vertices); i++ {
-        m.vertices[i].X += x;
-        m.vertices[i].Y += y;
-        m.vertices[i].Z += z;
+        m.vertices[i].X += v.X;
+        m.vertices[i].Y += v.Y;
+        m.vertices[i].Z += v.Z;
     }
 }
