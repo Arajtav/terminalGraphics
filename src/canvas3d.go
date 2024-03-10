@@ -1,43 +1,15 @@
 package terminalGraphics
 
-// Stores Canvas and data needed to render 3d objects
-type Canvas3D struct {
-    cv Canvas;
-    fv float32;
+func DrawPoint3D(s *Canvas, v Vertex, fv float32, c Color) {
+    s.SetPixel(Point3DToPoint2D(v, fv), c);
 }
 
-// Initialize Canvas3D
-func (s *Canvas3D) Init(x int16, y int16, fv float32) {
-    s.cv.Init(x, y);
-    s.fv = fv;
+func DrawLine3D(s *Canvas, v0 Vertex, v1 Vertex, fv float32, c Color) {
+    s.DrawLine(Point3DToPoint2D(v0, fv), Point3DToPoint2D(v1, fv), c)
 }
 
-// Sets every pixel in Canvas to given color
-func (s *Canvas3D) Fill(c Color) {
-    s.cv.Fill(c);
-}
-
-// Sets every pixel in Canvas to #000000
-func (s *Canvas3D) Clear() {
-    s.cv.Clear();
-}
-
-// Prints Canvas to the terminal
-func (s *Canvas3D) Print() {
-    s.cv.Print();
-}
-
-
-func (s *Canvas3D) DrawPoint(v Vertex, c Color) {
-    s.cv.SetPixel(Point3DToPoint2D(v, s.fv), c);
-}
-
-func (s *Canvas3D) DrawLine(v0 Vertex, v1 Vertex, c Color) {
-    s.cv.DrawLine(Point3DToPoint2D(v0, s.fv), Point3DToPoint2D(v1, s.fv), c)
-}
-
-func (s *Canvas3D) DrawTriangle(v0 Vertex, v1 Vertex, v2 Vertex, c Color) {
-    s.DrawLine(v0, v1, c);
-    s.DrawLine(v1, v2, c);
-    s.DrawLine(v2, v0, c);
+func DrawTriangle3D(s *Canvas, v0 Vertex, v1 Vertex, v2 Vertex, fv float32, c Color) {
+    DrawLine3D(s, v0, v1, fv, c);
+    DrawLine3D(s, v1, v2, fv, c);
+    DrawLine3D(s, v2, v0, fv, c);
 }

@@ -5,34 +5,35 @@ import (
 )
 
 func main() {
-    // 3D cube
-    var s tg.Canvas3D;
-    s.Init(96, 96, 32.0);
+    var s tg.Canvas;
+    s.Init(96, 96);
+
+    fv := float32(32.0);
 
     s.Fill(tg.Color{255, 255, 255})
     c := tg.Color{0, 0, 0};
 
+    tg.DrawPoint3D(&s, tg.Vertex{0, 0, 0}, fv, c);
 
-    s.DrawPoint(tg.Vertex{0, 0, 0}, c);
-
+    i := float32(1.0);
     // back
-    s.DrawTriangle(tg.Vertex{-1, -1, 2}, tg.Vertex{-1,  1, 2}, tg.Vertex{ 1, -1, 2}, c);
-    s.DrawTriangle(tg.Vertex{ 1,  1, 2}, tg.Vertex{-1,  1, 2}, tg.Vertex{ 1, -1, 2}, c);
+    tg.DrawTriangle3D(&s, tg.Vertex{-1, -1, i+1}, tg.Vertex{-1,  1, i+1}, tg.Vertex{ 1, -1, i+1}, fv, c);
+    tg.DrawTriangle3D(&s, tg.Vertex{ 1,  1, i+1}, tg.Vertex{-1,  1, i+1}, tg.Vertex{ 1, -1, i+1}, fv, c);
     // front
-    s.DrawTriangle(tg.Vertex{-1, -1, 1}, tg.Vertex{ 1,  1, 1}, tg.Vertex{-1,  1, 1}, c);
-    s.DrawTriangle(tg.Vertex{-1, -1, 1}, tg.Vertex{ 1,  1, 1}, tg.Vertex{ 1, -1, 1}, c);
+    tg.DrawTriangle3D(&s, tg.Vertex{-1, -1,   i}, tg.Vertex{ 1,  1,   i}, tg.Vertex{-1,  1,   i}, fv, c);
+    tg.DrawTriangle3D(&s, tg.Vertex{-1, -1,   i}, tg.Vertex{ 1,  1,   i}, tg.Vertex{ 1, -1,   i}, fv, c);
     // left
-    s.DrawTriangle(tg.Vertex{-1, -1, 1}, tg.Vertex{-1, -1, 2}, tg.Vertex{-1,  1, 2}, c);
-    s.DrawTriangle(tg.Vertex{-1, -1, 1}, tg.Vertex{-1,  1, 1}, tg.Vertex{-1,  1, 2}, c);
+    tg.DrawTriangle3D(&s, tg.Vertex{-1, -1,   i}, tg.Vertex{-1, -1, i+1}, tg.Vertex{-1,  1, i+1}, fv, c);
+    tg.DrawTriangle3D(&s, tg.Vertex{-1, -1,   i}, tg.Vertex{-1,  1,   i}, tg.Vertex{-1,  1, i+1}, fv, c);
     // right
-    s.DrawTriangle(tg.Vertex{ 1, -1, 1}, tg.Vertex{ 1,  1, 1}, tg.Vertex{ 1, -1, 2}, c);
-    s.DrawTriangle(tg.Vertex{ 1,  1, 2}, tg.Vertex{ 1,  1, 1}, tg.Vertex{ 1, -1, 2}, c);
+    tg.DrawTriangle3D(&s, tg.Vertex{ 1, -1,   i}, tg.Vertex{ 1,  1,   i}, tg.Vertex{ 1, -1, i+1}, fv, c);
+    tg.DrawTriangle3D(&s, tg.Vertex{ 1,  1, i+1}, tg.Vertex{ 1,  1,   i}, tg.Vertex{ 1, -1, i+1}, fv, c);
     // bottom
-    s.DrawTriangle(tg.Vertex{ 1,  1, 1}, tg.Vertex{ 1,  1, 2}, tg.Vertex{-1,  1, 2}, c);
-    s.DrawTriangle(tg.Vertex{-1,  1, 1}, tg.Vertex{ 1,  1, 1}, tg.Vertex{-1,  1, 2}, c);
+    tg.DrawTriangle3D(&s, tg.Vertex{ 1,  1,   i}, tg.Vertex{ 1,  1, i+1}, tg.Vertex{-1,  1, i+1}, fv, c);
+    tg.DrawTriangle3D(&s, tg.Vertex{-1,  1,   i}, tg.Vertex{ 1,  1,   i}, tg.Vertex{-1,  1, i+1}, fv, c);
     // top
-    s.DrawTriangle(tg.Vertex{-1, -1, 1}, tg.Vertex{ 1, -1, 1}, tg.Vertex{ 1, -1, 2}, c);
-    s.DrawTriangle(tg.Vertex{-1, -1, 1}, tg.Vertex{-1, -1, 2}, tg.Vertex{ 1, -1, 2}, c);
-
+    tg.DrawTriangle3D(&s, tg.Vertex{-1, -1,   i}, tg.Vertex{ 1, -1,   i}, tg.Vertex{ 1, -1, i+1}, fv, c);
+    tg.DrawTriangle3D(&s, tg.Vertex{-1, -1,   i}, tg.Vertex{-1, -1, i+1}, tg.Vertex{ 1, -1, i+1}, fv, c);
+    
     s.Print();
 }
