@@ -14,7 +14,7 @@ func main() {
 
     c := tg.Color{0, 0, 0};
 
-    cube := tg.Cube(1.0);
+    cube := tg.Cube();
     cube.Move(tg.Vec3{0.0, 0.0, -2.0});
     tg.DrawModel(&s, cube, fv, c);
 

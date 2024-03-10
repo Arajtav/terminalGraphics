@@ -1,50 +1,81 @@
 package terminalGraphics
 
-type Triangle struct {
+type triangle struct {
     i0 uint16;
     i1 uint16;
     i2 uint16;
 }
 
+/*  model stores data in ready to process form
+    that means rotation and scale is applied when adding data to model, not when reading from it
+    that also means rotation and scale needs to be private, and only changeable by method which will also recalculate every Vertex
+*/
+
+// Model, stores transformed 3d data, covers transformed in object space
 type Model struct {
     vertices    []Vec3;
-    triangles   []Triangle;     // stores indexes of vertices, making triangles
+    triangles   []triangle;     // stores indexes of vertices, making triangles
+    rotation    Vec3;
+    scale       Vec3;
 }
 
-// TODO FUNCTIONS TO ADD FACES
-
-func Cube(size float32) Model {
+func GetEmptyModel() Model {
     var m Model;
-    m.vertices = append(m.vertices, Vec3{ size,  size,  size});
-    m.vertices = append(m.vertices, Vec3{-size,  size,  size});
-    m.vertices = append(m.vertices, Vec3{ size, -size,  size});
-    m.vertices = append(m.vertices, Vec3{-size, -size,  size});
-    m.vertices = append(m.vertices, Vec3{ size,  size, -size});
-    m.vertices = append(m.vertices, Vec3{-size,  size, -size});
-    m.vertices = append(m.vertices, Vec3{ size, -size, -size});
-    m.vertices = append(m.vertices, Vec3{-size, -size, -size});
-    // back
-    m.triangles = append(m.triangles, Triangle{4, 7, 6});
-    m.triangles = append(m.triangles, Triangle{4, 7, 5});
-    // front
-    m.triangles = append(m.triangles, Triangle{1, 3, 2});
-    m.triangles = append(m.triangles, Triangle{1, 0, 2});
-    // top
-    m.triangles = append(m.triangles, Triangle{0, 1, 4});
-    m.triangles = append(m.triangles, Triangle{5, 1, 4});
-    // bottom
-    m.triangles = append(m.triangles, Triangle{2, 3, 7});
-    m.triangles = append(m.triangles, Triangle{2, 6, 7});
-    // left
-    m.triangles = append(m.triangles, Triangle{0, 2, 4});
-    m.triangles = append(m.triangles, Triangle{6, 2, 4});
-    // right
-    m.triangles = append(m.triangles, Triangle{1, 3, 7});
-    m.triangles = append(m.triangles, Triangle{1, 5, 7});
+    m.scale = Vec3{1.0, 1.0, 1.0};
     return m;
 }
 
-// THIS IS FOR TEST, PROBABLY WILL BE REMOVED BECAUSE IT'S NOT NEEDED
+// Checks if Vertex exists in model, will return 65535 if Vertex doesn't exist. Vertex MUST already be transformed
+func (m *Model) getVertexId(v Vec3) uint16 {
+    for i := 0; i<len(m.vertices); i++ {
+        if m.vertices[i] == v {
+            return uint16(i);
+        }
+    }
+    return 65535;
+}
+
+// If vertex doesn't exist, this method will add it, if it does, function will return id of that vertex
+func (m *Model) SetVertex(v Vec3) uint16 {
+    v.X *= m.scale.X;
+    v.Y *= m.scale.Y;
+    v.Z *= m.scale.Z;
+    // TODO: APPLY ROTATION
+    i := m.getVertexId(v); if i != 65535 { return i; }
+    m.vertices = append(m.vertices, v);
+    return uint16(len(m.vertices)) - 1;
+}
+
+func (m *Model) AddTriangle(v0 Vec3, v1 Vec3, v2 Vec3) {
+    m.triangles = append(m.triangles, triangle{m.SetVertex(v0), m.SetVertex(v1), m.SetVertex(v2)});
+}
+
+func Cube() Model {
+    m := GetEmptyModel();
+
+    // back
+    m.AddTriangle(Vec3{ 1,  1, -1}, Vec3{-1, -1, -1}, Vec3{ 1, -1, -1});
+    m.AddTriangle(Vec3{ 1,  1, -1}, Vec3{-1, -1, -1}, Vec3{-1,  1, -1});
+    // front
+    m.AddTriangle(Vec3{-1,  1,  1}, Vec3{-1, -1,  1}, Vec3{ 1, -1,  1});
+    m.AddTriangle(Vec3{-1,  1,  1}, Vec3{ 1,  1,  1}, Vec3{ 1, -1,  1});
+    // // top
+    m.AddTriangle(Vec3{ 1,  1,  1}, Vec3{-1,  1,  1}, Vec3{ 1,  1, -1});
+    m.AddTriangle(Vec3{-1,  1, -1}, Vec3{-1,  1,  1}, Vec3{ 1,  1, -1});
+    // bottom
+    m.AddTriangle(Vec3{ 1, -1,  1}, Vec3{-1, -1,  1}, Vec3{-1, -1, -1});
+    m.AddTriangle(Vec3{ 1, -1,  1}, Vec3{ 1, -1, -1}, Vec3{-1, -1, -1});
+    // left
+    m.AddTriangle(Vec3{ 1,  1,  1}, Vec3{ 1, -1,  1}, Vec3{ 1,  1, -1});
+    m.AddTriangle(Vec3{ 1, -1, -1}, Vec3{ 1, -1,  1}, Vec3{ 1,  1, -1});
+    // right
+    m.AddTriangle(Vec3{-1,  1,  1}, Vec3{-1, -1,  1}, Vec3{-1, -1, -1});
+    m.AddTriangle(Vec3{-1,  1,  1}, Vec3{-1,  1, -1}, Vec3{-1, -1, -1});
+
+    return m;
+}
+
+// TODO: delete that after adding word space, moving in object space is useless
 func (m *Model) Move(v Vec3) {
     for i := 0; i<len(m.vertices); i++ {
         m.vertices[i].X += v.X;
