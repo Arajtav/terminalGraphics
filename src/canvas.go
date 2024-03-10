@@ -2,7 +2,7 @@ package terminalGraphics
 
 import "fmt"
 
-// Stores pixels and own size
+// Canvas, stores pixels and own size
 type Canvas struct {
     sizeX int16;
     sizeY int16;
@@ -49,21 +49,40 @@ func (s *Canvas) Print() {
 
 // Sets value of a pixel at given position to c
 func (s *Canvas) SetPixel(p Coord2D, c Color) {
-    if p.X >= s.sizeX/2 || p.Y >= s.sizeY/2 { return; }
-    s.data[int32(p.Y)+int32(s.sizeY/2)][int32(p.X)+int32(s.sizeX/2)] = c;
+    if p.X >= float32(s.sizeX/2) || p.Y >= float32(s.sizeY/2) { return; }
+    s.data[roundF32ToI32(p.Y)+int32(s.sizeY/2)][roundF32ToI32(p.X)+int32(s.sizeX/2)] = c;
 }
 
-// Same as SetPixel, but it doesn't check if pixel position is correct
+// Same as SetPixel(p, c), but it doesn't check if pixel position is correct
 func (s *Canvas) SetPixelUnsafe(p Coord2D, c Color) {
-    s.data[int32(p.Y)+int32(s.sizeY/2)][int32(p.X)+int32(s.sizeX/2)] = c;
+    s.data[roundF32ToI32(p.Y)+int32(s.sizeY/2)][roundF32ToI32(p.X)+int32(s.sizeX/2)] = c;
 }
 
-// TODO: REWRITE THAT. IT'S TEMPORARY
-func (s *Canvas) DrawLine(p0 Coord2D, p1 Coord2D, c Color) {
-    if p0.X >= s.sizeX/2 || p0.Y >= s.sizeY/2 || p1.X >= s.sizeX/2 || p1.Y >= s.sizeY/2 { return; }
-    if p0.X < -s.sizeX/2 || p0.Y < -s.sizeY/2 || p1.X < -s.sizeX/2 || p1.Y < -s.sizeY/2 { return; }
-    ll := dist2D(p0, p1);
-    for t := float32(0); t<1.0; t+=(1/ll) {
-        s.SetPixelUnsafe(Coord2D{int16(interpolate16(p0.X, p1.X, t)), int16(interpolate16(p0.Y, p1.Y, t))}, c);
+// Draws line from point a to point b
+func (s *Canvas) DrawLine(a Coord2D, b Coord2D, c Color) {
+    // TODO: CLIP LINE INSTEAD NOT DRAWING IT
+    if a.X >= float32(s.sizeX/2) || a.Y >= float32(s.sizeY/2) || b.X >= float32(s.sizeX/2) || b.Y >= float32(s.sizeY/2) { return; }
+    if a.X < float32(-s.sizeX/2) || a.Y < float32(-s.sizeY/2) || b.X < float32(-s.sizeX/2) || b.Y < float32(-s.sizeY/2) { return; }
+    ll := dist2D(a, b);
+    for t := float32(0); t<=1.0; t+=(1/ll) {
+        s.SetPixelUnsafe(Coord2D{Interpolate(a.X, b.X, t), Interpolate(a.Y, b.Y, t)}, c);
     }
+    s.SetPixelUnsafe(b, c);
+}
+
+// Outline of triangle
+func (s *Canvas) DrawTriangle(p0 Coord2D, p1 Coord2D, p2 Coord2D, c Color) {
+    s.DrawLine(p0, p1, c);
+    s.DrawLine(p1, p2, c);
+    s.DrawLine(p2, p0, c);
+}
+
+// Filled triangle
+func (s *Canvas) DrawTriangleFull(p0 Coord2D, p1 Coord2D, p2 Coord2D, c Color) {
+    // TODO, THIS IS VERY VERY BAD IMPLEMENTATION REWRITE IT
+    ll := (dist2D(p0, p2)+dist2D(p0, p1)/2.0)+dist2D(p1, p2);   // I`m not sure
+    for i := float32(0); i<=1.0; i+=(1/ll) {
+        s.DrawLine(p0, InterpolateCoord(p1, p2, i), c);
+    }
+    s.DrawTriangle(p0, p1, p2, c);  // this shouldn't be even needed
 }

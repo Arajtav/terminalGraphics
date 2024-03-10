@@ -1,6 +1,6 @@
 package terminalGraphics
 
-// Canvas related
+// RGB color byte per channel
 type Color struct {
     R uint8;
     G uint8;
@@ -8,11 +8,10 @@ type Color struct {
 }
 
 type Coord2D struct {
-    X int16;
-    Y int16;
+    X float32;
+    Y float32;
 }
 
-// 3D
 type Vertex struct {
     X float32;
     Y float32;
