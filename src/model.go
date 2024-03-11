@@ -17,7 +17,7 @@ type triangle struct {
 type Model struct {
     vertices    []Vec3;
     triangles   []triangle;     // stores indexes of vertices, making triangles
-    rotation    Vec3;
+    rotation    Vec3;           // object rotation in radians
     scale       Vec3;
     Position    Vec3;
 }
@@ -43,8 +43,10 @@ func (m *Model) SetScale(s Vec3) {
     m.scale = s;
 }
 
+// Returns current rotation of the model
 func (m *Model) GetRotation() Vec3 { return m.rotation; }
 
+// Changes rotation of the model, recalculates every vertex
 func (m *Model) SetRotation(rot Vec3) {
     for i := 0; i<len(m.vertices); i++ {
         // TODO: IDK, REVERSING ROTATION DOESN'T WORK WHEN DOING ALL AT ONE
@@ -113,30 +115,4 @@ func Rotate3D(v Vec3, rot Vec3) Vec3 {
     v.Z = Azx*px + Azy*py + Azz*pz;
 
     return v;
-}
-
-
-func Cube() Model {
-    m := GetEmptyModel();
-
-    // back
-    m.AddTriangle(Vec3{ 1,  1, -1}, Vec3{-1, -1, -1}, Vec3{ 1, -1, -1});
-    m.AddTriangle(Vec3{ 1,  1, -1}, Vec3{-1, -1, -1}, Vec3{-1,  1, -1});
-    // front
-    m.AddTriangle(Vec3{-1,  1,  1}, Vec3{-1, -1,  1}, Vec3{ 1, -1,  1});
-    m.AddTriangle(Vec3{-1,  1,  1}, Vec3{ 1,  1,  1}, Vec3{ 1, -1,  1});
-    // // top
-    m.AddTriangle(Vec3{ 1,  1,  1}, Vec3{-1,  1,  1}, Vec3{ 1,  1, -1});
-    m.AddTriangle(Vec3{-1,  1, -1}, Vec3{-1,  1,  1}, Vec3{ 1,  1, -1});
-    // bottom
-    m.AddTriangle(Vec3{ 1, -1,  1}, Vec3{-1, -1,  1}, Vec3{-1, -1, -1});
-    m.AddTriangle(Vec3{ 1, -1,  1}, Vec3{ 1, -1, -1}, Vec3{-1, -1, -1});
-    // left
-    m.AddTriangle(Vec3{ 1,  1,  1}, Vec3{ 1, -1,  1}, Vec3{ 1,  1, -1});
-    m.AddTriangle(Vec3{ 1, -1, -1}, Vec3{ 1, -1,  1}, Vec3{ 1,  1, -1});
-    // right
-    m.AddTriangle(Vec3{-1,  1,  1}, Vec3{-1, -1,  1}, Vec3{-1, -1, -1});
-    m.AddTriangle(Vec3{-1,  1,  1}, Vec3{-1,  1, -1}, Vec3{-1, -1, -1});
-
-    return m;
 }

@@ -18,7 +18,7 @@ func main() {
     cube.Position.Z = 3.0;
     for i := 0; true; i++ {
         s.Fill(tg.Color{255, 255, 255});
-        cube.SetRotation(tg.Vec3{float32(i)/4.0, float32(i)/4.0, 0.0});
+        cube.SetRotation(tg.Vec3{tg.DegreesToRadians(float32(2*i%360)), tg.DegreesToRadians(float32(5*i%360)), 0.0});
         tg.DrawModel(&s, cube, fv, c);
         fmt.Print("\x1b\x5b\x48\x1b\x5b\x32\x4a\x1b\x5b\x33\x4a");  // clearing screen
         s.Print();

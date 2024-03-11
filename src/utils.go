@@ -26,3 +26,8 @@ func roundF32ToI32(v float32) int32 {
     if v < 0 { return int32(v); }
     return int32(v + 0.5);
 }
+
+// Converts degrees to radians
+func DegreesToRadians(degrees float32) float32 {
+	return degrees * (math.Pi / 180.0)
+}
