@@ -20,7 +20,11 @@ func DrawTriangle3D(s *Canvas, v0 Vec3, v1 Vec3, v2 Vec3, fv float32, c Color) {
 
 func DrawModel(s *Canvas, m Model, fv float32, c Color) {
     for i := 0; i<len(m.triangles); i++ {
-        DrawTriangle3D(s, m.vertices[m.triangles[i].i0], m.vertices[m.triangles[i].i1], m.vertices[m.triangles[i].i2], fv, c);
+        // calculate Vertex position in world space
+        v0 := AddVec3(m.vertices[m.triangles[i].i0], m.Position);
+        v1 := AddVec3(m.vertices[m.triangles[i].i1], m.Position);
+        v2 := AddVec3(m.vertices[m.triangles[i].i2], m.Position);
+        DrawTriangle3D(s, v0, v1, v2, fv, c);
     }
 }
 
@@ -29,4 +33,11 @@ func DrawModelV(s *Canvas, m Model, fv float32, c Color) {
     for i := 0; i<len(m.vertices); i++ {
         DrawPoint3D(s, m.vertices[i], fv, c);
     }
+}
+
+func AddVec3(v0 Vec3, v1 Vec3) Vec3 {
+    v0.X += v1.X;
+    v0.Y += v1.Y;
+    v0.Z += v1.Z;
+    return v0;
 }
