@@ -2,7 +2,7 @@ package terminalGraphics
 
 type Camera struct {
     Fv          float32;
-    Rotataion   Vec3;
+    Rotation    Vec3;
     Position    Vec3;
 }
 
@@ -23,13 +23,14 @@ func (w *World) AddModel(m *Model) {
 }
 
 func (w *World) Render(s *Canvas, c Color) {
+    rotNew := SubVec3(Vec3{0, 0, 0}, w.Cam.Rotation);
     for i := 0 ; i<len(w.models); i++ {
         for j := 0; j<len(w.models[i].triangles); j++ {
             // calculate vertex position in world space
             // for each vertex move it to position relative to camera (from Model.Position and Cam.Position), and rotate it relative to camera
-            v0 := Rotate3D(AddVec3(w.models[i].vertices[w.models[i].triangles[j].i0], AddVec3(w.models[i].Position, w.Cam.Position)), w.Cam.Rotataion);
-            v1 := Rotate3D(AddVec3(w.models[i].vertices[w.models[i].triangles[j].i1], AddVec3(w.models[i].Position, w.Cam.Position)), w.Cam.Rotataion);
-            v2 := Rotate3D(AddVec3(w.models[i].vertices[w.models[i].triangles[j].i2], AddVec3(w.models[i].Position, w.Cam.Position)), w.Cam.Rotataion);
+            v0 := Rotate3D(AddVec3(w.models[i].vertices[w.models[i].triangles[j].i0], SubVec3(w.models[i].Position, w.Cam.Position)), rotNew);
+            v1 := Rotate3D(AddVec3(w.models[i].vertices[w.models[i].triangles[j].i1], SubVec3(w.models[i].Position, w.Cam.Position)), rotNew);
+            v2 := Rotate3D(AddVec3(w.models[i].vertices[w.models[i].triangles[j].i2], SubVec3(w.models[i].Position, w.Cam.Position)), rotNew);
 
             drawTriangle3D(s, v0, v1, v2, w.Cam.Fv, c);
         }
@@ -66,5 +67,13 @@ func AddVec3(v0 Vec3, v1 Vec3) Vec3 {
     v0.X += v1.X;
     v0.Y += v1.Y;
     v0.Z += v1.Z;
+    return v0;
+}
+
+// Subtracts x of v1 from v0 and so on
+func SubVec3(v0 Vec3, v1 Vec3) Vec3 {
+    v0.X -= v1.X;
+    v0.Y -= v1.Y;
+    v0.Z -= v1.Z;
     return v0;
 }
