@@ -1,7 +1,8 @@
 package terminalGraphics
 
 import (
-    "math"
+	"math"
+	"fmt"
 )
 
 // t=0 is a, t=1 is b
@@ -30,4 +31,13 @@ func roundF32ToI32(v float32) int32 {
 // Converts degrees to radians
 func DegreesToRadians(degrees float32) float32 {
 	return degrees * (math.Pi / 180.0)
+}
+
+// Moves cursor to top left of the terminal
+func Chome() {
+    fmt.Print("\033[H");
+}
+
+func ClearTerm() {
+    fmt.Print("\x1b\x5b\x48\x1b\x5b\x32\x4a\x1b\x5b\x33\x4a");
 }

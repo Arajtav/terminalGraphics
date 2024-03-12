@@ -1,12 +1,11 @@
 package main
 
 import (
-	"fmt"
 	tg "terminalGraphics/src"
-	"time"
 )
 
 func main() {
+    tg.ClearTerm();
     var s tg.Canvas;
     s.Init(96, 96);
 
@@ -20,8 +19,7 @@ func main() {
         s.Fill(tg.Color{255, 255, 255});
         cube.SetRotation(tg.Vec3{tg.DegreesToRadians(float32(2*i%360)), tg.DegreesToRadians(float32(5*i%360)), 0.0});
         tg.DrawModel(&s, cube, fv, c);
-        fmt.Print("\x1b\x5b\x48\x1b\x5b\x32\x4a\x1b\x5b\x33\x4a");  // clearing screen
+        tg.Chome();
         s.Print();
-        time.Sleep(125000000);
     }
 }
