@@ -24,3 +24,12 @@ func Cube() Model {
 
     return m;
 }
+
+func Plane() Model {
+    m := GetEmptyModel();
+
+    m.AddTriangle(Vec3{-1,  0, -1}, Vec3{-1,  0,  1}, Vec3{ 1,  0, -1});
+    m.AddTriangle(Vec3{ 1,  0,  1}, Vec3{-1,  0,  1}, Vec3{ 1,  0, -1});
+
+    return m;
+}

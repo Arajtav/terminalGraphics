@@ -4,9 +4,9 @@ import "fmt"
 
 // Canvas, stores pixels and own size
 type Canvas struct {
-    sizeX int16;
-    sizeY int16;
-    data [][]Color;
+    sizeX   int16;
+    sizeY   int16;
+    data    [][]Color;
 }
 
 // Initialize Canvas with given size

@@ -22,7 +22,7 @@ func main() {
     w.AddModel(&cube1);
     w.AddModel(&cube2);
 
-    w.Cam.Pos.Z = -8.0;
+    w.Cam.Position.Z = -8.0;
 
 
     for i := 0; true; i++ {
@@ -30,7 +30,7 @@ func main() {
         s.Fill(tg.Color{255, 255, 255});
         cube1.SetRotation(tg.Vec3{tg.DegreesToRadians(float32(2*i%360)), tg.DegreesToRadians(float32(5*i%360)), 0.0});
         w.Render(&s, tg.Color{0, 0, 0});
-        w.Cam.Rot.Z += tg.DegreesToRadians(1.0);
+        w.Cam.Rotataion.Z += tg.DegreesToRadians(1.0);
         tg.Chome();
         fmt.Println();
         s.Print();

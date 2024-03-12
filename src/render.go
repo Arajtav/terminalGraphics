@@ -1,15 +1,15 @@
 package terminalGraphics
 
-// TODO: ACTUALLY USE CAMERA
 type Camera struct {
-    Fv float32;
-    Rot Vec3;
-    Pos Vec3;
+    Fv          float32;
+    Rotataion   Vec3;
+    Position    Vec3;
 }
 
+// Renderer to which you can add models
 type World struct {
-    models []*Model;
-    Cam Camera;
+    models      []*Model;
+    Cam         Camera;
 }
 
 func GetEmptyWorld(fv float32) World {
@@ -25,13 +25,11 @@ func (w *World) AddModel(m *Model) {
 func (w *World) Render(s *Canvas, c Color) {
     for i := 0 ; i<len(w.models); i++ {
         for j := 0; j<len(w.models[i].triangles); j++ {
-            // calculate Vertex position in world space
-            v0 := AddVec3(w.models[i].vertices[w.models[i].triangles[j].i0], AddVec3(w.models[i].Position, w.Cam.Pos));
-            v1 := AddVec3(w.models[i].vertices[w.models[i].triangles[j].i1], AddVec3(w.models[i].Position, w.Cam.Pos));
-            v2 := AddVec3(w.models[i].vertices[w.models[i].triangles[j].i2], AddVec3(w.models[i].Position, w.Cam.Pos));
-            v0 = Rotate3D(v0, w.Cam.Rot);
-            v1 = Rotate3D(v1, w.Cam.Rot);
-            v2 = Rotate3D(v2, w.Cam.Rot);
+            // calculate vertex position in world space
+            // for each vertex move it to position relative to camera (from Model.Position and Cam.Position), and rotate it relative to camera
+            v0 := Rotate3D(AddVec3(w.models[i].vertices[w.models[i].triangles[j].i0], AddVec3(w.models[i].Position, w.Cam.Position)), w.Cam.Rotataion);
+            v1 := Rotate3D(AddVec3(w.models[i].vertices[w.models[i].triangles[j].i1], AddVec3(w.models[i].Position, w.Cam.Position)), w.Cam.Rotataion);
+            v2 := Rotate3D(AddVec3(w.models[i].vertices[w.models[i].triangles[j].i2], AddVec3(w.models[i].Position, w.Cam.Position)), w.Cam.Rotataion);
 
             drawTriangle3D(s, v0, v1, v2, w.Cam.Fv, c);
         }

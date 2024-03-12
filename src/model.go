@@ -83,6 +83,7 @@ func (m *Model) AddTriangle(v0 Vec3, v1 Vec3, v2 Vec3) {
     m.triangles = append(m.triangles, triangle{m.SetVertex(v0), m.SetVertex(v1), m.SetVertex(v2)});
 }
 
+// Rotates vertex v, by rot. Rotation is in radians
 func Rotate3D(v Vec3, rot Vec3) Vec3 {
     cosa := float32(math.Cos(float64(rot.Z)));
     sina := float32(math.Sin(float64(rot.Z)));
