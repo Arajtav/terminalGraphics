@@ -24,9 +24,9 @@ func main() {
 
     w.Cam.Position.Z = -8.0;
 
-
-    for i := 0; true; i++ {
-        ts := time.Now().UnixNano();
+    i := 0
+    ts := time.Now().UnixNano();
+    for {
         s.Fill(tg.Color{255, 255, 255});
         cube1.SetRotation(tg.Vec3{tg.DegreesToRadians(float32(2*i%360)), tg.DegreesToRadians(float32(5*i%360)), 0.0});
         w.Render(&s, tg.Color{0, 0, 0});
@@ -34,7 +34,8 @@ func main() {
         tg.Chome();
         fmt.Println();
         s.Print();
-        tg.Chome();
-        fmt.Printf("current fps: %f", 1000000000/float64(time.Now().UnixNano()-ts));
+        i++;
+        if time.Now().UnixNano()-ts > 1000000000 { break; }
     }
+    fmt.Printf("%d frames in 1 second\n", i);
 }

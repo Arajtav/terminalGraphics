@@ -61,17 +61,56 @@ func (s *Canvas) SetPixelUnsafe(p Vec2, c Color) {
     s.data[roundF32ToI32(p.Y)+int32(s.sizeY/2)][roundF32ToI32(p.X)+int32(s.sizeX/2)] = c;
 }
 
-// Draws line from point a to point b
-func (s *Canvas) DrawLine(a Vec2, b Vec2, c Color) {
-    // TODO: REAL LINE CLIPPING INSTEAD RELYING ON SetPixel SAFETY
-    ll := dist2D(a, b);
-    for t := float32(0); t<=1.0; t+=(1/ll) {
-        s.SetPixel(Vec2{Interpolate(a.X, b.X, t), Interpolate(a.Y, b.Y, t)}, c);
-    }
-    s.SetPixel(b, c);
+// Vec2 but with int32 for DrawLine
+type i32vec2 struct {
+    X int32;
+    Y int32;
+};
+
+func pxPosToU(p Vec2, sizex int16, sizey int16) i32vec2 {
+    return i32vec2{roundF32ToI32(p.X)+int32(sizex/2), roundF32ToI32(p.Y)+int32(sizey/2)};
 }
 
-// Outline of triangle
+// Draws line from point ra to point rb
+// based on Bresenham's line algorithm
+func (s *Canvas) DrawLine(ra Vec2, rb Vec2, c Color) {
+    a := pxPosToU(ra, s.sizeX, s.sizeY);
+    b := pxPosToU(rb, s.sizeX, s.sizeY);
+
+    d := i32vec2{b.X - a.X, b.Y - a.Y};
+    g := i32vec2{1, 1};
+
+    if d.X < 0 {
+        d.X = -d.X;
+        g.X = -1;
+    }
+    if d.Y < 0 {
+        d.Y = -d.Y;
+        g.Y = -1;
+    }
+
+    err := d.X - d.Y;
+    cp := a;
+
+    for {
+        // TODO, CLIP LINE TO CANVAS EDGES FIRST, INSTEAD OF THAT CHECKS IN LOOP
+        if cp.X >= int32(s.sizeX) || cp.Y >= int32(s.sizeY) || cp.X < 0 || cp.Y < 0 { break; }
+        s.data[cp.Y][cp.X] = c;
+        if cp.X == b.X && cp.Y == b.Y { break; }
+
+        e2 := 2 * err;
+        if e2 > -d.Y {
+            err -= d.Y;
+            cp.X += g.X;
+        }
+        if e2 < d.X {
+            err += d.X;
+            cp.Y += g.Y;
+        }
+    }
+}
+
+// Outline of a triangle
 func (s *Canvas) DrawTriangle(p0 Vec2, p1 Vec2, p2 Vec2, c Color) {
     s.DrawLine(p0, p1, c);
     s.DrawLine(p1, p2, c);
