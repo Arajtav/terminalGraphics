@@ -1,5 +1,7 @@
 package terminalGraphics
 
+import "math"
+
 type Camera struct {
     Fv          float32;
     Rotation    Vec3;
@@ -24,13 +26,44 @@ func (w *World) AddModel(m *Model) {
 
 func (w *World) Render(s *Canvas, c Color) {
     rotNew := SubVec3(Vec3{0, 0, 0}, w.Cam.Rotation);
+
+    cosa := float32(math.Cos(float64(rotNew.Z)));
+    sina := float32(math.Sin(float64(rotNew.Z)));
+    cosb := float32(math.Cos(float64(rotNew.Y)));
+    sinb := float32(math.Sin(float64(rotNew.Y)));
+    cosc := float32(math.Cos(float64(rotNew.X)));
+    sinc := float32(math.Sin(float64(rotNew.X)));
+
+    Axx := cosa*cosb;
+    Axy := cosa*sinb*sinc - sina*cosc;
+    Axz := cosa*sinb*cosc + sina*sinc;
+    Ayx := sina*cosb;
+    Ayy := sina*sinb*sinc + cosa*cosc;
+    Ayz := sina*sinb*cosc - cosa*sinc;
+    Azx := -sinb;
+    Azy := cosb*sinc;
+    Azz := cosb*cosc;
+
     for i := 0 ; i<len(w.models); i++ {
         for j := 0; j<len(w.models[i].triangles); j++ {
             // calculate vertex position in world space
             // for each vertex move it to position relative to camera (from Model.Position and Cam.Position), and rotate it relative to camera
-            v0 := Rotate3D(AddVec3(w.models[i].vertices[w.models[i].triangles[j].i0], SubVec3(w.models[i].Position, w.Cam.Position)), rotNew);
-            v1 := Rotate3D(AddVec3(w.models[i].vertices[w.models[i].triangles[j].i1], SubVec3(w.models[i].Position, w.Cam.Position)), rotNew);
-            v2 := Rotate3D(AddVec3(w.models[i].vertices[w.models[i].triangles[j].i2], SubVec3(w.models[i].Position, w.Cam.Position)), rotNew);
+            // I know this code looks bad, but it's just Rotate3D without need to recalculate all stuff.
+            v0 := AddVec3(w.models[i].vertices[w.models[i].triangles[j].i0], SubVec3(w.models[i].Position, w.Cam.Position));
+            vcopy := v0;
+            v0.X = Axx*vcopy.X + Axy*vcopy.Y + Axz*vcopy.Z;
+            v0.Y = Ayx*vcopy.X + Ayy*vcopy.Y + Ayz*vcopy.Z;
+            v0.Z = Azx*vcopy.X + Azy*vcopy.Y + Azz*vcopy.Z;
+            v1 := AddVec3(w.models[i].vertices[w.models[i].triangles[j].i1], SubVec3(w.models[i].Position, w.Cam.Position));
+            vcopy = v1;
+            v1.X = Axx*vcopy.X + Axy*vcopy.Y + Axz*vcopy.Z;
+            v1.Y = Ayx*vcopy.X + Ayy*vcopy.Y + Ayz*vcopy.Z;
+            v1.Z = Azx*vcopy.X + Azy*vcopy.Y + Azz*vcopy.Z;
+            v2 := AddVec3(w.models[i].vertices[w.models[i].triangles[j].i2], SubVec3(w.models[i].Position, w.Cam.Position));
+            vcopy = v2;
+            v2.X = Axx*vcopy.X + Axy*vcopy.Y + Axz*vcopy.Z;
+            v2.Y = Ayx*vcopy.X + Ayy*vcopy.Y + Ayz*vcopy.Z;
+            v2.Z = Azx*vcopy.X + Azy*vcopy.Y + Azz*vcopy.Z;
 
             drawTriangle3D(s, v0, v1, v2, w.Cam.Fv, c);
         }
