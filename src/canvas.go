@@ -1,6 +1,9 @@
 package terminalGraphics
 
-import "fmt"
+import (
+	"fmt"
+	"sort"
+)
 
 // Canvas, stores pixels and own size
 type Canvas struct {
@@ -71,12 +74,14 @@ func pxPosToU(p Vec2, sizex int16, sizey int16) i32vec2 {
     return i32vec2{roundF32ToI32(p.X)+int32(sizex/2), roundF32ToI32(p.Y)+int32(sizey/2)};
 }
 
+func (s *Canvas) DrawLine(ra Vec2, rb Vec2, c Color) {
+    s.drawLinei32(pxPosToU(ra, s.sizeX, s.sizeY), pxPosToU(rb, s.sizeX, s.sizeY), c);
+}
+
 // Draws line from point ra to point rb
 // based on Bresenham's line algorithm
-func (s *Canvas) DrawLine(ra Vec2, rb Vec2, c Color) {
-    a := pxPosToU(ra, s.sizeX, s.sizeY);
-    b := pxPosToU(rb, s.sizeX, s.sizeY);
-
+func (s *Canvas) drawLinei32(a i32vec2, b i32vec2, c Color) {
+    // Not using getLine form utils because it would slow things down a lot
     d := i32vec2{b.X - a.X, b.Y - a.Y};
     g := i32vec2{1, 1};
 
@@ -117,12 +122,27 @@ func (s *Canvas) DrawTriangle(p0 Vec2, p1 Vec2, p2 Vec2, c Color) {
     s.DrawLine(p2, p0, c);
 }
 
-// Filled triangle
+// Filled triangle (scan line algorithm)
 func (s *Canvas) DrawTriangleFull(p0 Vec2, p1 Vec2, p2 Vec2, c Color) {
-    // TODO, THIS IS VERY VERY BAD IMPLEMENTATION REWRITE IT
-    ll := (dist2D(p0, p2)+dist2D(p0, p1)/2.0)+dist2D(p1, p2);   // I`m not sure
-    for i := float32(0); i<=1.0; i+=(1/ll) {
-        s.DrawLine(p0, InterpolateVec2(p1, p2, i), c);
+    var points []i32vec2;
+    points = append(points, getLine(pxPosToU(p0, s.sizeX, s.sizeY), pxPosToU(p1, s.sizeX, s.sizeY))...);
+    points = append(points, getLine(pxPosToU(p1, s.sizeX, s.sizeY), pxPosToU(p2, s.sizeX, s.sizeY))...);
+    points = append(points, getLine(pxPosToU(p2, s.sizeX, s.sizeY), pxPosToU(p0, s.sizeX, s.sizeY))...);
+
+    sort.Slice(points, func(i int, j int) bool {
+        return points[i].Y < points[j].Y || (points[i].Y == points[j].Y && points[i].X <= points[j].X);
+    });
+
+    i := 0;
+    for i<len(points) {
+        startp := points[i];
+        j := i;
+        for points[j].Y == points[i].Y {    // finding last position with same y
+            j++;
+            if j >= len(points) { break; }
+        }
+        endp := points[j-1];
+        s.drawLinei32(startp, endp, c);
+        i = j;
     }
-    s.DrawTriangle(p0, p1, p2, c);  // this shouldn't be even needed
 }

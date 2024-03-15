@@ -85,7 +85,7 @@ func drawLine3D(s *Canvas, a Vec3, b Vec3, fv float32, c Color) {
 }
 
 func drawTriangle3D(s *Canvas, v0 Vec3, v1 Vec3, v2 Vec3, fv float32, c Color) {
-    s.DrawTriangle(point3DToPoint2D(v0, fv), point3DToPoint2D(v1, fv), point3DToPoint2D(v2, fv), c);
+    s.DrawTriangleFull(point3DToPoint2D(v0, fv), point3DToPoint2D(v1, fv), point3DToPoint2D(v2, fv), c);
 }
 
 // For debug, renders only points

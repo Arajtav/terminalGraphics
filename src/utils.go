@@ -42,3 +42,39 @@ func Chome() {
 func ClearTerm() {
     fmt.Print("\x1b\x5b\x48\x1b\x5b\x32\x4a\x1b\x5b\x33\x4a");
 }
+
+// based on Bresenham's line algorithm
+func getLine(a i32vec2, b i32vec2) []i32vec2 {
+    d := i32vec2{b.X - a.X, b.Y - a.Y};
+    g := i32vec2{1, 1};
+
+    if d.X < 0 {
+        d.X = -d.X;
+        g.X = -1;
+    }
+    if d.Y < 0 {
+        d.Y = -d.Y;
+        g.Y = -1;
+    }
+
+    err := d.X - d.Y;
+    cp := a;
+
+    var points []i32vec2;
+
+    for {
+        points = append(points, cp);
+        if cp.X == b.X && cp.Y == b.Y { break; }
+
+        e2 := 2 * err;
+        if e2 > -d.Y {
+            err -= d.Y;
+            cp.X += g.X;
+        }
+        if e2 < d.X {
+            err += d.X;
+            cp.Y += g.Y;
+        }
+    }
+    return points;
+}
