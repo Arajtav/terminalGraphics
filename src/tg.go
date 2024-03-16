@@ -1,3 +1,3 @@
 package terminalGraphics
 
-const VERSION uint32 = 5;
+const VERSION uint32 = 6;

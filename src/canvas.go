@@ -36,9 +36,7 @@ func (s *Canvas) Fill(c Color) {
 }
 
 // Sets every pixel in Canvas to #000000
-func (s *Canvas) Clear() {
-    s.Fill(Color{0, 0, 0});
-}
+func (s *Canvas) Clear() { s.Fill(Color{0, 0, 0}); }
 
 // Prints Canvas to the terminal
 func (s *Canvas) Print() {
@@ -57,11 +55,6 @@ func (s *Canvas) SetPixel(p Vec2, c Color) {
     if x >=  int32(s.sizeX/2)   || y >=  int32(s.sizeY/2)   { return; }
     if x <= -int32(s.sizeX/2)-1 || y <= -int32(s.sizeY/2)-1 { return; }
     s.data[y+int32(s.sizeY/2)][x+int32(s.sizeX/2)] = c;
-}
-
-// Same as SetPixel(p, c), but it doesn't check if pixel position is correct
-func (s *Canvas) SetPixelUnsafe(p Vec2, c Color) {
-    s.data[roundF32ToI32(p.Y)+int32(s.sizeY/2)][roundF32ToI32(p.X)+int32(s.sizeX/2)] = c;
 }
 
 // Vec2 but with int32 for DrawLine
@@ -113,13 +106,6 @@ func (s *Canvas) drawLinei32(a i32vec2, b i32vec2, c Color) {
             cp.Y += g.Y;
         }
     }
-}
-
-// Outline of a triangle
-func (s *Canvas) DrawTriangle(p0 Vec2, p1 Vec2, p2 Vec2, c Color) {
-    s.DrawLine(p0, p1, c);
-    s.DrawLine(p1, p2, c);
-    s.DrawLine(p2, p0, c);
 }
 
 // Filled triangle (scan line algorithm)

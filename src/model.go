@@ -50,10 +50,10 @@ func (m *Model) GetRotation() Vec3 { return m.rotation; }
 func (m *Model) SetRotation(rot Vec3) {
     for i := 0; i<len(m.vertices); i++ {
         // TODO: IDK, REVERSING ROTATION DOESN'T WORK WHEN DOING ALL AT ONE
-        m.vertices[i].Position = Rotate3D(m.vertices[i].Position, Vec3{0, 0, -m.rotation.Z});
-        m.vertices[i].Position = Rotate3D(m.vertices[i].Position, Vec3{0, -m.rotation.Y, 0});
-        m.vertices[i].Position = Rotate3D(m.vertices[i].Position, Vec3{-m.rotation.X, 0, 0});
-        m.vertices[i].Position = Rotate3D(m.vertices[i].Position, rot);
+        Rotate3D(&(m.vertices[i].Position), Vec3{0, 0, -m.rotation.Z});
+        Rotate3D(&(m.vertices[i].Position), Vec3{0, -m.rotation.Y, 0});
+        Rotate3D(&(m.vertices[i].Position), Vec3{-m.rotation.X, 0, 0});
+        Rotate3D(&(m.vertices[i].Position), rot);
     }
     m.rotation = rot;
 }
@@ -73,7 +73,7 @@ func (m *Model) SetVertex(v Vertex) uint16 {
     v.Position.X *= m.scale.X;
     v.Position.Y *= m.scale.Y;
     v.Position.Z *= m.scale.Z;
-    v.Position = Rotate3D(v.Position, m.rotation);
+    Rotate3D(&v.Position, m.rotation);
     i := m.getVertexId(v); if i != 65535 { return i; }
     m.vertices = append(m.vertices, v);
     return uint16(len(m.vertices)) - 1;
@@ -84,7 +84,7 @@ func (m *Model) AddTriangle(v0 Vertex, v1 Vertex, v2 Vertex) {
 }
 
 // Rotates vertex v, by rot. Rotation is in radians
-func Rotate3D(v Vec3, rot Vec3) Vec3 {
+func Rotate3D(v *Vec3, rot Vec3) {
     cosa := float32(math.Cos(float64(rot.Z)));
     sina := float32(math.Sin(float64(rot.Z)));
 
@@ -114,6 +114,4 @@ func Rotate3D(v Vec3, rot Vec3) Vec3 {
     v.X = Axx*px + Axy*py + Axz*pz;
     v.Y = Ayx*px + Ayy*py + Ayz*pz;
     v.Z = Azx*px + Azy*py + Azz*pz;
-
-    return v;
 }

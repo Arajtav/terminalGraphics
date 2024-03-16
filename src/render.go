@@ -21,13 +21,8 @@ func GetEmptyWorld(fv float32) World {
     return w;
 }
 
-func (w *World) AddMaterial(m Material) {
-    w.materials = append(w.materials, m);
-}
-
-func (w *World) AddModel(m *Model) {
-    w.models = append(w.models, m);
-}
+func (w *World) AddMaterial(m Material) { w.materials = append(w.materials, m); }
+func (w *World) AddModel(m *Model) { w.models = append(w.models, m); }
 
 func (w *World) Render(s *Canvas, c Color) {
     rotNew := SubVec3(Vec3{0, 0, 0}, w.Cam.Rotation);
@@ -80,10 +75,6 @@ func point3DToPoint2D(v Vec3, fv float32) Vec2 {
     return Vec2{v.X/v.Z*fv, v.Y/v.Z*fv};
 }
 
-func drawPoint3D(s *Canvas, v Vec3, fv float32, c Color) {
-    s.SetPixel(point3DToPoint2D(v, fv), c);
-}
-
 // Line from Vec3 to Vec3
 func drawLine3D(s *Canvas, a Vec3, b Vec3, fv float32, c Color) {
     s.DrawLine(point3DToPoint2D(a, fv), point3DToPoint2D(b, fv), c)
@@ -91,27 +82,4 @@ func drawLine3D(s *Canvas, a Vec3, b Vec3, fv float32, c Color) {
 
 func drawTriangle3D(s *Canvas, v0 Vec3, v1 Vec3, v2 Vec3, fv float32, c Color) {
     s.DrawTriangleFull(point3DToPoint2D(v0, fv), point3DToPoint2D(v1, fv), point3DToPoint2D(v2, fv), c);
-}
-
-// For debug, renders only points
-func drawModelV(s *Canvas, m Model, fv float32, c Color) {
-    for i := 0; i<len(m.vertices); i++ {
-        drawPoint3D(s, m.vertices[i].Position, fv, c);
-    }
-}
-
-// Adds x of v0 to v1, y to y and so on
-func AddVec3(v0 Vec3, v1 Vec3) Vec3 {
-    v0.X += v1.X;
-    v0.Y += v1.Y;
-    v0.Z += v1.Z;
-    return v0;
-}
-
-// Subtracts x of v1 from v0 and so on
-func SubVec3(v0 Vec3, v1 Vec3) Vec3 {
-    v0.X -= v1.X;
-    v0.Y -= v1.Y;
-    v0.Z -= v1.Z;
-    return v0;
 }
