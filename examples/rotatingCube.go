@@ -12,7 +12,11 @@ func main() {
     cube := tg.Cube();
     cube.SetScale(tg.Vec3{X:2.0, Y:2.0, Z:2.0});
 
+    mflat := tg.MaterialFlat{C: tg.Color{R: 0, G: 0, B: 0}};
+
     w := tg.GetEmptyWorld(96.0);
+
+    w.AddMaterial(&mflat);
 
     w.AddModel(&cube);
 

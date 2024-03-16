@@ -11,6 +11,7 @@ type Camera struct {
 // Renderer to which you can add models
 type World struct {
     models      []*Model;
+    materials   []Material;
     Cam         Camera;
 }
 
@@ -18,6 +19,10 @@ func GetEmptyWorld(fv float32) World {
     var w World;
     w.Cam.Fv = fv;
     return w;
+}
+
+func (w *World) AddMaterial(m Material) {
+    w.materials = append(w.materials, m);
 }
 
 func (w *World) AddModel(m *Model) {
