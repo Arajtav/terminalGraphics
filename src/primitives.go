@@ -4,23 +4,23 @@ func Cube() Model {
     m := GetEmptyModel();
 
     // back
-    m.AddTriangle(Vec3{ 1,  1, -1}, Vec3{-1, -1, -1}, Vec3{ 1, -1, -1});
-    m.AddTriangle(Vec3{ 1,  1, -1}, Vec3{-1, -1, -1}, Vec3{-1,  1, -1});
+    m.AddTriangle(Vertex{Vec3{ 1,  1, -1}, Vec2{0, 0}}, Vertex{Vec3{-1, -1, -1}, Vec2{0, 0}}, Vertex{Vec3{ 1, -1, -1}, Vec2{0, 0}});
+    m.AddTriangle(Vertex{Vec3{ 1,  1, -1}, Vec2{0, 0}}, Vertex{Vec3{-1, -1, -1}, Vec2{0, 0}}, Vertex{Vec3{-1,  1, -1}, Vec2{0, 0}});
     // front
-    m.AddTriangle(Vec3{-1,  1,  1}, Vec3{-1, -1,  1}, Vec3{ 1, -1,  1});
-    m.AddTriangle(Vec3{-1,  1,  1}, Vec3{ 1,  1,  1}, Vec3{ 1, -1,  1});
+    m.AddTriangle(Vertex{Vec3{-1,  1,  1}, Vec2{0, 0}}, Vertex{Vec3{-1, -1,  1}, Vec2{0, 0}}, Vertex{Vec3{ 1, -1,  1}, Vec2{0, 0}});
+    m.AddTriangle(Vertex{Vec3{-1,  1,  1}, Vec2{0, 0}}, Vertex{Vec3{ 1,  1,  1}, Vec2{0, 0}}, Vertex{Vec3{ 1, -1,  1}, Vec2{0, 0}});
     // // top
-    m.AddTriangle(Vec3{ 1,  1,  1}, Vec3{-1,  1,  1}, Vec3{ 1,  1, -1});
-    m.AddTriangle(Vec3{-1,  1, -1}, Vec3{-1,  1,  1}, Vec3{ 1,  1, -1});
+    m.AddTriangle(Vertex{Vec3{ 1,  1,  1}, Vec2{0, 0}}, Vertex{Vec3{-1,  1,  1}, Vec2{0, 0}}, Vertex{Vec3{ 1,  1, -1}, Vec2{0, 0}});
+    m.AddTriangle(Vertex{Vec3{-1,  1, -1}, Vec2{0, 0}}, Vertex{Vec3{-1,  1,  1}, Vec2{0, 0}}, Vertex{Vec3{ 1,  1, -1}, Vec2{0, 0}});
     // bottom
-    m.AddTriangle(Vec3{ 1, -1,  1}, Vec3{-1, -1,  1}, Vec3{-1, -1, -1});
-    m.AddTriangle(Vec3{ 1, -1,  1}, Vec3{ 1, -1, -1}, Vec3{-1, -1, -1});
+    m.AddTriangle(Vertex{Vec3{ 1, -1,  1}, Vec2{0, 0}}, Vertex{Vec3{-1, -1,  1}, Vec2{0, 0}}, Vertex{Vec3{-1, -1, -1}, Vec2{0, 0}});
+    m.AddTriangle(Vertex{Vec3{ 1, -1,  1}, Vec2{0, 0}}, Vertex{Vec3{ 1, -1, -1}, Vec2{0, 0}}, Vertex{Vec3{-1, -1, -1}, Vec2{0, 0}});
     // left
-    m.AddTriangle(Vec3{ 1,  1,  1}, Vec3{ 1, -1,  1}, Vec3{ 1,  1, -1});
-    m.AddTriangle(Vec3{ 1, -1, -1}, Vec3{ 1, -1,  1}, Vec3{ 1,  1, -1});
+    m.AddTriangle(Vertex{Vec3{ 1,  1,  1}, Vec2{0, 0}}, Vertex{Vec3{ 1, -1,  1}, Vec2{0, 0}}, Vertex{Vec3{ 1,  1, -1}, Vec2{0, 0}});
+    m.AddTriangle(Vertex{Vec3{ 1, -1, -1}, Vec2{0, 0}}, Vertex{Vec3{ 1, -1,  1}, Vec2{0, 0}}, Vertex{Vec3{ 1,  1, -1}, Vec2{0, 0}});
     // right
-    m.AddTriangle(Vec3{-1,  1,  1}, Vec3{-1, -1,  1}, Vec3{-1, -1, -1});
-    m.AddTriangle(Vec3{-1,  1,  1}, Vec3{-1,  1, -1}, Vec3{-1, -1, -1});
+    m.AddTriangle(Vertex{Vec3{-1,  1,  1}, Vec2{0, 0}}, Vertex{Vec3{-1, -1,  1}, Vec2{0, 0}}, Vertex{Vec3{-1, -1, -1}, Vec2{0, 0}});
+    m.AddTriangle(Vertex{Vec3{-1,  1,  1}, Vec2{0, 0}}, Vertex{Vec3{-1,  1, -1}, Vec2{0, 0}}, Vertex{Vec3{-1, -1, -1}, Vec2{0, 0}});
 
     return m;
 }
@@ -28,8 +28,8 @@ func Cube() Model {
 func Plane() Model {
     m := GetEmptyModel();
 
-    m.AddTriangle(Vec3{-1,  0, -1}, Vec3{-1,  0,  1}, Vec3{ 1,  0, -1});
-    m.AddTriangle(Vec3{ 1,  0,  1}, Vec3{-1,  0,  1}, Vec3{ 1,  0, -1});
+    m.AddTriangle(Vertex{Vec3{-1,  0, -1}, Vec2{0, 0}}, Vertex{Vec3{-1,  0,  1}, Vec2{0, 0}}, Vertex{Vec3{ 1,  0, -1}, Vec2{0, 0}});
+    m.AddTriangle(Vertex{Vec3{ 1,  0,  1}, Vec2{0, 0}}, Vertex{Vec3{-1,  0,  1}, Vec2{0, 0}}, Vertex{Vec3{ 1,  0, -1}, Vec2{0, 0}});
 
     return m;
 }

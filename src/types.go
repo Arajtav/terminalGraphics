@@ -19,3 +19,9 @@ type Vec3 struct {
     Y float32;
     Z float32;
 }
+
+// Vertex
+type Vertex struct {
+    Position    Vec3;
+    UV          Vec2;
+}

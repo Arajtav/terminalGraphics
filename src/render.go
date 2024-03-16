@@ -49,17 +49,17 @@ func (w *World) Render(s *Canvas, c Color) {
             // calculate vertex position in world space
             // for each vertex move it to position relative to camera (from Model.Position and Cam.Position), and rotate it relative to camera
             // I know this code looks bad, but it's just Rotate3D without need to recalculate all stuff.
-            v0 := AddVec3(w.models[i].vertices[w.models[i].triangles[j].i0], SubVec3(w.models[i].Position, w.Cam.Position));
+            v0 := AddVec3(w.models[i].vertices[w.models[i].triangles[j].i0].Position, SubVec3(w.models[i].Position, w.Cam.Position));
             vcopy := v0;
             v0.X = Axx*vcopy.X + Axy*vcopy.Y + Axz*vcopy.Z;
             v0.Y = Ayx*vcopy.X + Ayy*vcopy.Y + Ayz*vcopy.Z;
             v0.Z = Azx*vcopy.X + Azy*vcopy.Y + Azz*vcopy.Z;
-            v1 := AddVec3(w.models[i].vertices[w.models[i].triangles[j].i1], SubVec3(w.models[i].Position, w.Cam.Position));
+            v1 := AddVec3(w.models[i].vertices[w.models[i].triangles[j].i1].Position, SubVec3(w.models[i].Position, w.Cam.Position));
             vcopy = v1;
             v1.X = Axx*vcopy.X + Axy*vcopy.Y + Axz*vcopy.Z;
             v1.Y = Ayx*vcopy.X + Ayy*vcopy.Y + Ayz*vcopy.Z;
             v1.Z = Azx*vcopy.X + Azy*vcopy.Y + Azz*vcopy.Z;
-            v2 := AddVec3(w.models[i].vertices[w.models[i].triangles[j].i2], SubVec3(w.models[i].Position, w.Cam.Position));
+            v2 := AddVec3(w.models[i].vertices[w.models[i].triangles[j].i2].Position, SubVec3(w.models[i].Position, w.Cam.Position));
             vcopy = v2;
             v2.X = Axx*vcopy.X + Axy*vcopy.Y + Axz*vcopy.Z;
             v2.Y = Ayx*vcopy.X + Ayy*vcopy.Y + Ayz*vcopy.Z;
@@ -91,7 +91,7 @@ func drawTriangle3D(s *Canvas, v0 Vec3, v1 Vec3, v2 Vec3, fv float32, c Color) {
 // For debug, renders only points
 func drawModelV(s *Canvas, m Model, fv float32, c Color) {
     for i := 0; i<len(m.vertices); i++ {
-        drawPoint3D(s, m.vertices[i], fv, c);
+        drawPoint3D(s, m.vertices[i].Position, fv, c);
     }
 }
 
