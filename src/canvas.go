@@ -49,12 +49,12 @@ func (s *Canvas) Print() {
 }
 
 // Sets value of a pixel at given position to c
-func (s *Canvas) SetPixel(p Vec2, c Color) {
+func (s *Canvas) SetPixel(p Vec2) {
     x := roundF32ToI32(p.X);
     y := roundF32ToI32(p.Y);
     if x >=  int32(s.sizeX/2)   || y >=  int32(s.sizeY/2)   { return; }
     if x <= -int32(s.sizeX/2)-1 || y <= -int32(s.sizeY/2)-1 { return; }
-    s.data[y+int32(s.sizeY/2)][x+int32(s.sizeX/2)] = c;
+    s.data[y+int32(s.sizeY/2)][x+int32(s.sizeX/2)] = Color{127, 127, 127};
 }
 
 // Vec2 but with int32 for DrawLine
@@ -67,13 +67,13 @@ func pxPosToU(p Vec2, sizex int16, sizey int16) i32vec2 {
     return i32vec2{roundF32ToI32(p.X)+int32(sizex/2), roundF32ToI32(p.Y)+int32(sizey/2)};
 }
 
-func (s *Canvas) DrawLine(ra Vec2, rb Vec2, c Color) {
-    s.drawLinei32(pxPosToU(ra, s.sizeX, s.sizeY), pxPosToU(rb, s.sizeX, s.sizeY), c);
+func (s *Canvas) DrawLine(ra Vec2, rb Vec2) {
+    s.drawLinei32(pxPosToU(ra, s.sizeX, s.sizeY), pxPosToU(rb, s.sizeX, s.sizeY));
 }
 
 // Draws line from point ra to point rb
 // based on Bresenham's line algorithm
-func (s *Canvas) drawLinei32(a i32vec2, b i32vec2, c Color) {
+func (s *Canvas) drawLinei32(a i32vec2, b i32vec2) {
     // Not using getLine form utils because it would slow things down a lot
     d := i32vec2{b.X - a.X, b.Y - a.Y};
     g := i32vec2{1, 1};
@@ -93,7 +93,7 @@ func (s *Canvas) drawLinei32(a i32vec2, b i32vec2, c Color) {
     for {
         // TODO, CLIP LINE TO CANVAS EDGES FIRST, INSTEAD OF THAT CHECKS IN LOOP
         if cp.X >= int32(s.sizeX) || cp.Y >= int32(s.sizeY) || cp.X < 0 || cp.Y < 0 { break; }
-        s.data[cp.Y][cp.X] = c;
+        s.data[cp.Y][cp.X] = Color{127, 127, 127};
         if cp.X == b.X && cp.Y == b.Y { break; }
 
         e2 := 2 * err;
@@ -109,7 +109,7 @@ func (s *Canvas) drawLinei32(a i32vec2, b i32vec2, c Color) {
 }
 
 // Filled triangle (scan line algorithm)
-func (s *Canvas) DrawTriangleFull(p0 Vec2, p1 Vec2, p2 Vec2, c Color) {
+func (s *Canvas) DrawTriangleFull(p0 Vec2, p1 Vec2, p2 Vec2) {
     var points []i32vec2;
     points = append(points, getLine(pxPosToU(p0, s.sizeX, s.sizeY), pxPosToU(p1, s.sizeX, s.sizeY))...);
     points = append(points, getLine(pxPosToU(p1, s.sizeX, s.sizeY), pxPosToU(p2, s.sizeX, s.sizeY))...);
@@ -128,7 +128,7 @@ func (s *Canvas) DrawTriangleFull(p0 Vec2, p1 Vec2, p2 Vec2, c Color) {
             if j >= len(points) { break; }
         }
         endp := points[j-1];
-        s.drawLinei32(startp, endp, c);
+        s.drawLinei32(startp, endp);
         i = j;
     }
 }

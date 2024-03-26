@@ -24,7 +24,7 @@ func GetEmptyWorld(fv float32) World {
 func (w *World) AddMaterial(m Material) { w.materials = append(w.materials, m); }
 func (w *World) AddModel(m *Model) { w.models = append(w.models, m); }
 
-func (w *World) Render(s *Canvas, c Color) {
+func (w *World) Render(s *Canvas) {
     rotNew := SubVec3(Vec3{0, 0, 0}, w.Cam.Rotation);
 
     cosa := float32(math.Cos(float64(rotNew.Z)));
@@ -65,7 +65,7 @@ func (w *World) Render(s *Canvas, c Color) {
             v2.Y = Ayx*vcopy.X + Ayy*vcopy.Y + Ayz*vcopy.Z;
             v2.Z = Azx*vcopy.X + Azy*vcopy.Y + Azz*vcopy.Z;
 
-            drawTriangle3D(s, v0, v1, v2, w.Cam.Fv, c);
+            drawTriangle3D(s, v0, v1, v2, w.Cam.Fv);
         }
     }
 }
@@ -76,10 +76,10 @@ func point3DToPoint2D(v Vec3, fv float32) Vec2 {
 }
 
 // Line from Vec3 to Vec3
-func drawLine3D(s *Canvas, a Vec3, b Vec3, fv float32, c Color) {
-    s.DrawLine(point3DToPoint2D(a, fv), point3DToPoint2D(b, fv), c)
+func drawLine3D(s *Canvas, a Vec3, b Vec3, fv float32) {
+    s.DrawLine(point3DToPoint2D(a, fv), point3DToPoint2D(b, fv))
 }
 
-func drawTriangle3D(s *Canvas, v0 Vec3, v1 Vec3, v2 Vec3, fv float32, c Color) {
-    s.DrawTriangleFull(point3DToPoint2D(v0, fv), point3DToPoint2D(v1, fv), point3DToPoint2D(v2, fv), c);
+func drawTriangle3D(s *Canvas, v0 Vec3, v1 Vec3, v2 Vec3, fv float32) {
+    s.DrawTriangleFull(point3DToPoint2D(v0, fv), point3DToPoint2D(v1, fv), point3DToPoint2D(v2, fv));
 }

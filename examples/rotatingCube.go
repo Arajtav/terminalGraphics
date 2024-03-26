@@ -26,7 +26,7 @@ func main() {
 
     i := float32(0.0)
     for {
-        s.Fill(tg.Color{R:255, G:255, B:255});
+        s.Clear();
         w.Render(&s, tg.Color{R:0, G:0, B:0});
         cube.SetRotation(tg.Vec3{X:0, Y:0, Z:tg.DegreesToRadians(i)})
         tg.Chome();
