@@ -1,6 +1,10 @@
 package terminalGraphics
 
-import "math"
+import (
+	"math"
+
+	tc "github.com/Arajtav/terminalCanvas"
+)
 
 type Camera struct {
     Fv          float32;
@@ -11,7 +15,6 @@ type Camera struct {
 // Renderer to which you can add models
 type World struct {
     models      []*Model;
-    materials   []Material;
     Cam         Camera;
 }
 
@@ -21,10 +24,9 @@ func GetEmptyWorld(fv float32) World {
     return w;
 }
 
-func (w *World) AddMaterial(m Material) { w.materials = append(w.materials, m); }
 func (w *World) AddModel(m *Model) { w.models = append(w.models, m); }
 
-func (w *World) Render(s *Canvas) {
+func (w *World) Render(s *tc.Canvas) {
     rotNew := SubVec3(Vec3{0, 0, 0}, w.Cam.Rotation);
 
     cosa := float32(math.Cos(float64(rotNew.Z)));
@@ -50,22 +52,25 @@ func (w *World) Render(s *Canvas) {
             // for each vertex move it to position relative to camera (from Model.Position and Cam.Position), and rotate it relative to camera
             // I know this code looks bad, but it's just Rotate3D without need to recalculate all stuff.
             v0 := AddVec3(w.models[i].vertices[w.models[i].triangles[j].i0].Position, SubVec3(w.models[i].Position, w.Cam.Position));
+            v0u := w.models[i].vertices[w.models[i].triangles[j].i0].UV;
             vcopy := v0;
             v0.X = Axx*vcopy.X + Axy*vcopy.Y + Axz*vcopy.Z;
             v0.Y = Ayx*vcopy.X + Ayy*vcopy.Y + Ayz*vcopy.Z;
             v0.Z = Azx*vcopy.X + Azy*vcopy.Y + Azz*vcopy.Z;
             v1 := AddVec3(w.models[i].vertices[w.models[i].triangles[j].i1].Position, SubVec3(w.models[i].Position, w.Cam.Position));
+            v1u := w.models[i].vertices[w.models[i].triangles[j].i1].UV;
             vcopy = v1;
             v1.X = Axx*vcopy.X + Axy*vcopy.Y + Axz*vcopy.Z;
             v1.Y = Ayx*vcopy.X + Ayy*vcopy.Y + Ayz*vcopy.Z;
             v1.Z = Azx*vcopy.X + Azy*vcopy.Y + Azz*vcopy.Z;
             v2 := AddVec3(w.models[i].vertices[w.models[i].triangles[j].i2].Position, SubVec3(w.models[i].Position, w.Cam.Position));
+            v2u := w.models[i].vertices[w.models[i].triangles[j].i2].UV;
             vcopy = v2;
             v2.X = Axx*vcopy.X + Axy*vcopy.Y + Axz*vcopy.Z;
             v2.Y = Ayx*vcopy.X + Ayy*vcopy.Y + Ayz*vcopy.Z;
             v2.Z = Azx*vcopy.X + Azy*vcopy.Y + Azz*vcopy.Z;
 
-            drawTriangle3D(s, v0, v1, v2, w.Cam.Fv);
+            drawTriangle3D(s, Vertex{v0, v0u}, Vertex{v1, v1u}, Vertex{v2, v2u}, w.Cam.Fv, tc.MaterialUV{});
         }
     }
 }
@@ -75,11 +80,14 @@ func point3DToPoint2D(v Vec3, fv float32) Vec2 {
     return Vec2{v.X/v.Z*fv, v.Y/v.Z*fv};
 }
 
-// Line from Vec3 to Vec3
-func drawLine3D(s *Canvas, a Vec3, b Vec3, fv float32) {
-    s.DrawLine(point3DToPoint2D(a, fv), point3DToPoint2D(b, fv))
+func Vec2ToCvI16Vec2(v Vec2) tc.I16Vec2 {
+    return tc.I16Vec2{X: int16(roundF32ToI32(v.X)), Y: int16(roundF32ToI32(v.Y))};
 }
 
-func drawTriangle3D(s *Canvas, v0 Vec3, v1 Vec3, v2 Vec3, fv float32) {
-    s.DrawTriangleFull(point3DToPoint2D(v0, fv), point3DToPoint2D(v1, fv), point3DToPoint2D(v2, fv));
+func drawTriangle3D(s *tc.Canvas, v0 Vertex, v1 Vertex, v2 Vertex, fv float32, f tc.Material) {
+    // fmt.Println(s, v0, v1, v2, fv, f);
+    s.DrawTriangleFC(   tc.I16Frag{Pos: Vec2ToCvI16Vec2(point3DToPoint2D(v0.Position, fv)), UV: tc.F32Vec2{X: v0.UV.X, Y: v0.UV.Y}},
+                        tc.I16Frag{Pos: Vec2ToCvI16Vec2(point3DToPoint2D(v1.Position, fv)), UV: tc.F32Vec2{X: v1.UV.X, Y: v1.UV.Y}},
+                        tc.I16Frag{Pos: Vec2ToCvI16Vec2(point3DToPoint2D(v2.Position, fv)), UV: tc.F32Vec2{X: v2.UV.X, Y: v2.UV.Y}},
+                        f);
 }

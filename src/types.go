@@ -1,12 +1,5 @@
 package terminalGraphics
 
-// RGB color byte per channel
-type Color struct {
-    R uint8;
-    G uint8;
-    B uint8;
-}
-
 // Vec2 with float32
 type Vec2 struct {
     X float32;
