@@ -70,7 +70,7 @@ func (w *World) Render(s *tc.Canvas) {
             v2.Y = Ayx*vcopy.X + Ayy*vcopy.Y + Ayz*vcopy.Z;
             v2.Z = Azx*vcopy.X + Azy*vcopy.Y + Azz*vcopy.Z;
 
-            drawTriangle3D(s, Vertex{v0, v0u}, Vertex{v1, v1u}, Vertex{v2, v2u}, w.Cam.Fv, tc.MaterialUV{});
+            drawTriangle3D(s, Vertex{v0, v0u}, Vertex{v1, v1u}, Vertex{v2, v2u}, w.Cam.Fv, w.Cam.Position, tc.MaterialUV{});
         }
     }
 }
@@ -84,10 +84,13 @@ func Vec2ToCvI16Vec2(v Vec2) tc.I16Vec2 {
     return tc.I16Vec2{X: int16(roundF32ToI32(v.X)), Y: int16(roundF32ToI32(v.Y))};
 }
 
-func drawTriangle3D(s *tc.Canvas, v0 Vertex, v1 Vertex, v2 Vertex, fv float32, f tc.Material) {
-    // fmt.Println(s, v0, v1, v2, fv, f);
-    s.DrawTriangleFC(   tc.I16Frag{Pos: Vec2ToCvI16Vec2(point3DToPoint2D(v0.Position, fv)), UV: tc.F32Vec2{X: v0.UV.X, Y: v0.UV.Y}},
-                        tc.I16Frag{Pos: Vec2ToCvI16Vec2(point3DToPoint2D(v1.Position, fv)), UV: tc.F32Vec2{X: v1.UV.X, Y: v1.UV.Y}},
-                        tc.I16Frag{Pos: Vec2ToCvI16Vec2(point3DToPoint2D(v2.Position, fv)), UV: tc.F32Vec2{X: v2.UV.X, Y: v2.UV.Y}},
+func dist3D(a Vec3, b Vec3) float32 {
+    return float32(math.Sqrt(math.Pow(float64(a.X)-float64(b.X), 2.0)) + math.Pow(float64(a.Y)-float64(b.Y), 2.0) + math.Pow(float64(a.Z)-float64(b.Z), 2.0));
+}
+
+func drawTriangle3D(s *tc.Canvas, v0 Vertex, v1 Vertex, v2 Vertex, fv float32, camPos Vec3, f tc.Material) {
+    s.DrawTriangleFC(   tc.I16Frag{Pos: Vec2ToCvI16Vec2(point3DToPoint2D(v0.Position, fv)), UV: tc.F32Vec2{X: v0.UV.X, Y: v0.UV.Y}, Z: dist3D(camPos, v0.Position)},
+                        tc.I16Frag{Pos: Vec2ToCvI16Vec2(point3DToPoint2D(v1.Position, fv)), UV: tc.F32Vec2{X: v1.UV.X, Y: v1.UV.Y}, Z: dist3D(camPos, v1.Position)},
+                        tc.I16Frag{Pos: Vec2ToCvI16Vec2(point3DToPoint2D(v2.Position, fv)), UV: tc.F32Vec2{X: v2.UV.X, Y: v2.UV.Y}, Z: dist3D(camPos, v2.Position)},
                         f);
 }
