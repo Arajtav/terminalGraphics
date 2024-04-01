@@ -70,7 +70,7 @@ func (w *World) Render(s *tc.Canvas) {
             v2.Y = Ayx*vcopy.X + Ayy*vcopy.Y + Ayz*vcopy.Z;
             v2.Z = Azx*vcopy.X + Azy*vcopy.Y + Azz*vcopy.Z;
 
-            drawTriangle3D(s, Vertex{v0, v0u}, Vertex{v1, v1u}, Vertex{v2, v2u}, w.Cam.Fv, w.Cam.Position, tc.MaterialUV{});
+            drawTriangle3D(s, Vertex{v0, v0u}, Vertex{v1, v1u}, Vertex{v2, v2u}, w.Cam.Fv, w.Cam.Position, w.models[i].materials[w.models[i].triangles[j].mt]);
         }
     }
 }

@@ -1,11 +1,15 @@
 package terminalGraphics
 
-import "math"
+import (
+    "math"
+    tc "github.com/Arajtav/terminalCanvas"
+)
 
 type triangle struct {
-    i0 uint16;
-    i1 uint16;
-    i2 uint16;
+    i0  uint16;
+    i1  uint16;
+    i2  uint16;
+    mt  uint8;  // max. 256 materials per model.
 }
 
 /*  model stores data in ready to process form
@@ -17,6 +21,7 @@ type triangle struct {
 type Model struct {
     vertices    []Vertex;
     triangles   []triangle;     // stores indexes of vertices, making triangles
+    materials   []tc.Material;
     rotation    Vec3;           // object rotation in radians
     scale       Vec3;
     Position    Vec3;
@@ -79,8 +84,18 @@ func (m *Model) SetVertex(v Vertex) uint16 {
     return uint16(len(m.vertices)) - 1;
 }
 
-func (m *Model) AddTriangle(v0 Vertex, v1 Vertex, v2 Vertex) {
-    m.triangles = append(m.triangles, triangle{m.SetVertex(v0), m.SetVertex(v1), m.SetVertex(v2)});
+func (m *Model) SetMaterial(mt tc.Material) uint8 {
+    for i := 0; i<len(m.materials); i++ {
+        if mt == m.materials[i] {
+            return uint8(i);
+        }
+    }
+    m.materials = append(m.materials, mt);
+    return uint8(len(m.materials)-1);
+}
+
+func (m *Model) AddTriangle(v0 Vertex, v1 Vertex, v2 Vertex, mt tc.Material) {
+    m.triangles = append(m.triangles, triangle{m.SetVertex(v0), m.SetVertex(v1), m.SetVertex(v2), m.SetMaterial(mt)});
 }
 
 // Rotates vertex v, by rot. Rotation is in radians

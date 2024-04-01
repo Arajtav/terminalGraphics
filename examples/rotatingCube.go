@@ -10,7 +10,7 @@ func main() {
     s := *tc.NewCanvas(96, 96);
     s.Ccolor.B = 255;
 
-    m := tg.Cube();
+    m := tg.Cube(tc.MaterialUV{});
     m.SetScale(tg.Vec3{X:2.0, Y:2.0, Z:2.0});
 
     w := tg.GetEmptyWorld(96.0);
@@ -25,7 +25,7 @@ func main() {
     for {
         s.Clear();
         w.Render(&s);
-        m.SetRotation(tg.Vec3{X:0, Y:0, Z:tg.DegreesToRadians(i)})
+        m.SetRotation(tg.Vec3{X:0, Y:0, Z:tg.DegreesToRadians(i)});
         tg.Chome();
         s.Print();
         i += 1.0;
