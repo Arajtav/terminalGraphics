@@ -10,7 +10,7 @@ func main() {
     s := *tc.NewCanvas(96, 96);
     s.Ccolor.B = 255;
 
-    m := tg.Plane();
+    m := tg.Cube();
     m.SetScale(tg.Vec3{X:2.0, Y:2.0, Z:2.0});
 
     w := tg.GetEmptyWorld(96.0);
