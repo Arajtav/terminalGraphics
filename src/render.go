@@ -26,7 +26,10 @@ func GetEmptyWorld(fv float32) World {
 
 func (w *World) AddModel(m *Model) { w.models = append(w.models, m) }
 
-func (w *World) Render(s *tc.Canvas) {
+// returns number of triangles rendered
+func (w *World) Render(s *tc.Canvas) uint32 {
+    tris := uint32(0)
+    s.Clear()
     rotNew := SubVec3(Vec3{0, 0, 0}, w.Cam.Rotation)
 
     cosa := float32(math.Cos(float64(rotNew.Z)))
@@ -71,8 +74,10 @@ func (w *World) Render(s *tc.Canvas) {
             v2.Z = Azx*vcopy.X + Azy*vcopy.Y + Azz*vcopy.Z
 
             drawTriangle3D(s, Vertex{v0, v0u}, Vertex{v1, v1u}, Vertex{v2, v2u}, w.Cam.Fv, w.Cam.Position, w.models[i].materials[w.models[i].triangles[j].mt])
+            tris++
         }
     }
+    return tris
 }
 
 // converts 3D position to a screen position

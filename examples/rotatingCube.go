@@ -48,15 +48,17 @@ func main() {
     frames[1].Print() // this is important, because later there is only PrintD
     c := float32(0.0)
     for {
-        frames[0].Clear()
         time_start := time.Now().Nanosecond()
-        w.Render(frames[0])
+        tris := w.Render(frames[0])
+        _ = tris
         time_render := time.Now().Nanosecond()
         frames[0].PrintD(frames[1])
         time_print := time.Now().Nanosecond()
         for i := 0; i<len(models); i++ { models[i].SetRotation(tg.Vec3{Z: tg.DegreesToRadians(c)}) }
-        time_op := time.Now().Nanosecond()
-        fmt.Printf("render time: %10dns\nprint  time: %10dns\nchange time: %10dns\ntotal  time: %10dns\n", time_render - time_start, time_print - time_render, time_op - time_print, time.Now().Nanosecond() - time_start)
+        time_update := time.Now().Nanosecond()
+        fmt.Printf("render time: %10dns    print time: %10dns\n", time_render - time_start, time_print - time_render)
+        fmt.Printf("update time: %10dns    total time: %10dns\n", time_update - time_print, time.Now().Nanosecond() - time_start)
+        fmt.Printf("triangles:   %10d\n", tris)
         c += 0.5
         swapCanvas()
     }
